@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/index.js",
-    "dev": "ts-node-dev  --inspect --ignore-watch node_modules src/index.ts"
+    "dev": "NODE_ENV=env ts-node-dev  --inspect --ignore-watch node_modules src/index.ts"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +35,9 @@
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
     "multer": "^1.4.5-lts.1",
-    "uuid": "^9.0.1"
+    "mysql2": "^3.10.0",
+    "typeorm": "^0.3.20",
+    "uuid": "^9.0.1",
+    "zod": "^3.23.8"
   }
 }
