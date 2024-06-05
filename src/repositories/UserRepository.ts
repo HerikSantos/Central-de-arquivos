@@ -30,6 +30,12 @@ class UserRepository implements IUserRepository {
     async findByID({ id }: User): Promise<User | null> {
         return await this.repository.findOneBy({ id });
     }
+
+    async findByEmail({ email }: { email: string }): Promise<User | null> {
+        return await this.repository.findOneBy({
+            email,
+        });
+    }
 }
 
 export { UserRepository };

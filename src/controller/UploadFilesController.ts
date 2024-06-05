@@ -1,6 +1,6 @@
 import { type Request, type Response } from "express";
 
-import { uploadFiles } from "./awsConfig";
+import { uploadFiles } from "../awsConfig";
 
 class UploadFiles {
     async handle(request: Request, response: Response): Promise<Response> {

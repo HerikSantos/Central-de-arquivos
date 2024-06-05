@@ -2,6 +2,8 @@ import { DataSource } from "typeorm";
 
 import { env } from "../enviroment";
 
+console.log(env.NODE_ENV);
+
 const AppDataSource = new DataSource({
     type: "mysql",
     host: env.DB_HOST,
@@ -11,11 +13,7 @@ const AppDataSource = new DataSource({
     database: env.DB_DATABASE,
     synchronize: true,
     logging: true,
-    entities: [
-        process.env.NODE_ENV
-            ? "./dist/database/entities/*.js"
-            : "./src/database/entities/*.ts",
-    ],
+    entities: ["./src/database/entities/*.ts"],
 });
 
 export { AppDataSource };

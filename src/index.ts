@@ -6,7 +6,7 @@ import { route } from "./routes";
 const app = express();
 
 app.use(express.json());
-app.use("/upload", route);
+app.use(route);
 
 AppDataSource.initialize()
     .then(() => {
