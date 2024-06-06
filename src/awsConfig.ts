@@ -5,22 +5,35 @@ dotenv.config();
 
 const s3 = new AWS.S3({});
 
-const bucketName = "projetosteste-herik";
-
 async function uploadFiles(
     fileName,
     fileContent: Express.Multer.File,
-): Promise<void> {
-    const params = {
-        Bucket: bucketName,
-        Key: `${Date.now()}_${fileName}`,
-        Body: fileContent.buffer,
-    };
-
+): Promise<string | undefined> {
     try {
-        const data = await s3.upload(params).promise();
+        const bucketName = "projetosteste-herik";
+        const key = `${Date.now()}_${fileName}`;
 
-        console.log(`Arquivo carregado com sucesso. URL: ${data.Location}`);
+        const params = {
+            Bucket: bucketName,
+            Key: key,
+            Body: fileContent.buffer,
+        };
+
+        await s3.upload(params).promise();
+
+        const generateSignedUrl = (bucketName, key, expires): string => {
+            const params = {
+                Bucket: bucketName,
+                Key: key,
+                Expires: expires,
+            };
+
+            return s3.getSignedUrl("getObject", params);
+        };
+
+        const result = generateSignedUrl(bucketName, key, 60);
+
+        return result;
     } catch (err) {
         console.log(err);
     }

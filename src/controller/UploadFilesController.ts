@@ -13,9 +13,11 @@ class UploadFiles {
 
         console.log(file);
 
-        await uploadFiles(file.originalname, file);
+        const signedUrl = await uploadFiles(file.originalname, file);
 
-        return response.send("oi bb ");
+        return response.json({
+            signedUrl,
+        });
     }
 }
 

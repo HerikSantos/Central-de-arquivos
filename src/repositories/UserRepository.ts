@@ -27,7 +27,7 @@ class UserRepository implements IUserRepository {
         return await this.repository.save(userCreated);
     }
 
-    async findByID({ id }: User): Promise<User | null> {
+    async findByID({ id }: { id: string }): Promise<User | null> {
         return await this.repository.findOneBy({ id });
     }
 
