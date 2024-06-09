@@ -1,6 +1,9 @@
 import { Router } from "express";
 
-import { UploadFiles } from "./controller/UploadFilesController";
+import {
+    UploadFiles,
+    IEditedRequest,
+} from "./controller/UploadFilesController";
 import { UserController } from "./controller/UserController";
 import { authenticateMiddleware } from "./middleware/authenticateMiddleware";
 import { upload } from "./multer";

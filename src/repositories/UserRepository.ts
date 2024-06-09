@@ -36,6 +36,24 @@ class UserRepository implements IUserRepository {
             email,
         });
     }
+
+    async edit({
+        id,
+        availableUploadSpace,
+    }: {
+        id: string;
+        availableUploadSpace?: number;
+    }): Promise<void> {
+        const user = await this.findByID({ id });
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        Object.assign(user, { availableUploadSpace });
+
+        await this.repository.save(user);
+    }
 }
 
 export { UserRepository };
