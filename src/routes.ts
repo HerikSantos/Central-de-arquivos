@@ -1,5 +1,6 @@
 import { Router } from "express";
 
+import { ReadUploadController } from "./controller/ReadUploadController";
 import {
     UploadFiles,
     IEditedRequest,
@@ -11,6 +12,7 @@ import { upload } from "./multer";
 const route = Router();
 const uploadFiles = new UploadFiles();
 const userController = new UserController();
+const readUpdateController = new ReadUploadController();
 
 route.post(
     "/upload",
@@ -20,6 +22,10 @@ route.post(
         await uploadFiles.handle(request, response);
     },
 );
+
+route.get("/upload", authenticateMiddleware, async (request, response) => {
+    await readUpdateController.handle(request, response);
+});
 
 route.post("/user", async (request, response) => {
     await userController.create(request, response);

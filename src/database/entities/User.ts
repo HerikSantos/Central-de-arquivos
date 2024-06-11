@@ -16,4 +16,7 @@ export class User {
 
     @Column({ default: 0 })
     availableUploadSpace: number;
+
+    @Column()
+    file: string;
 }

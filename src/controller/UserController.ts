@@ -59,43 +59,49 @@ class UserController {
     };
 
     login = async (request: Request, response: Response): Promise<Response> => {
-        const { email, password }: User = request.body;
+        try {
+            const { email, password }: User = request.body;
 
-        if (!email || !password)
-            return response.status(400).json({
-                message: "Password or email is incorrect",
+            if (!email || !password)
+                return response.status(400).json({
+                    message: "Password or email is incorrect",
+                });
+
+            if (!validator.isEmail(email)) {
+                return response.status(400).json({
+                    message: "Ivalid email",
+                });
+            }
+
+            const user = await userRepository.findByEmail({ email });
+
+            if (!user) {
+                return response.status(400).json({
+                    message: "Password or email is incorrect",
+                });
+            }
+
+            const passwordValid = await bcrypt.compare(password, user.password);
+
+            if (!passwordValid) {
+                return response.status(400).json({
+                    message: "Password or email is incorrect",
+                });
+            }
+
+            const token = jwt.sign(
+                { id: user.id, email: user.email },
+                env.JWT_SECRET,
+            );
+
+            return response.status(200).json({
+                token,
             });
-
-        if (!validator.isEmail(email)) {
+        } catch (err) {
             return response.status(400).json({
-                message: "Ivalid email",
+                message: err.message,
             });
         }
-
-        const user = await userRepository.findByEmail({ email });
-
-        if (!user) {
-            return response.status(400).json({
-                message: "Password or email is incorrect",
-            });
-        }
-
-        const passwordValid = await bcrypt.compare(password, user.password);
-
-        if (!passwordValid) {
-            return response.status(400).json({
-                message: "Password or email is incorrect",
-            });
-        }
-
-        const token = jwt.sign(
-            { id: user.id, email: user.email },
-            env.JWT_SECRET,
-        );
-
-        return response.status(200).json({
-            token,
-        });
     };
 }
 

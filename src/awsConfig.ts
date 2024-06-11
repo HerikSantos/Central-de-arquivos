@@ -8,7 +8,7 @@ const s3 = new AWS.S3({});
 async function uploadFiles(
     fileName,
     fileContent: Express.Multer.File,
-): Promise<string | undefined> {
+): Promise<{ result: string; key: string; bucketName: string } | undefined> {
     try {
         const bucketName = "projetosteste-herik";
         const key = `${Date.now()}_${fileName}`;
@@ -33,7 +33,7 @@ async function uploadFiles(
 
         const result = generateSignedUrl(bucketName, key, 60);
 
-        return result;
+        return { result, key, bucketName };
     } catch (err) {
         console.log(err);
     }
