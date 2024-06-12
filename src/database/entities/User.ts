@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+
+import { Upload } from "./Upload";
 
 @Entity()
 export class User {
@@ -17,6 +19,6 @@ export class User {
     @Column({ default: 0 })
     availableUploadSpace: number;
 
-    @Column()
-    file: string;
+    @OneToMany(() => Upload, (upload) => upload.user)
+    uploads: Upload[];
 }

@@ -2,11 +2,11 @@ import { type Upload } from "../database/entities/Upload";
 import { type User } from "../database/entities/User";
 
 interface IResponse {
-    user_id: string;
-    user_name: string;
-    user_email: string;
-    user_availableUploadSpace: number;
-    files: string;
+    id: string;
+    name: string;
+    email: string;
+    availableUploadSpace: number;
+    file: string;
 }
 
 class IUploadRepository {

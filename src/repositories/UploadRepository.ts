@@ -2,15 +2,15 @@ import { type Repository } from "typeorm";
 
 import { AppDataSource } from "../database";
 import { Upload } from "../database/entities/Upload";
-import { type User } from "../database/entities/User";
+import { User } from "../database/entities/User";
 import { type IUploadRepository } from "./IUploadRepository";
 
 interface IResponse {
-    user_id: string;
-    user_name: string;
-    user_email: string;
-    user_availableUploadSpace: number;
-    files: string;
+    id: string;
+    name: string;
+    email: string;
+    availableUploadSpace: number;
+    file: string;
 }
 
 class UploadRepository implements IUploadRepository {
@@ -37,22 +37,16 @@ class UploadRepository implements IUploadRepository {
     }
 
     async read(user: User): Promise<IResponse[]> {
-        const files = await this.repository
-            .createQueryBuilder("upload")
-            .innerJoin("upload.user", "user")
-            .select([
-                "user.id",
-                "user.email",
-                "user.name",
-                "user.availableUploadSpace",
-            ])
-            .addSelect("GROUP_CONCAT(upload.file SEPARATOR ', ')", "files")
-            .groupBy(
-                "user.id, user.email, user.name, user.availableUploadSpace",
-            )
-            .getRawMany();
+        const { id: userId } = user;
 
-        console.log(files);
+        const files = await AppDataSource.getRepository(User)
+            .createQueryBuilder("user")
+            .select([
+                "user.id as id, user.email as email, user.name as name, user.availableUploadSpace as availableUploadSpace, upload.file",
+            ])
+            .leftJoin("user.uploads", "upload")
+            .where("user.id = :userId", { userId })
+            .getRawMany<IResponse>();
 
         return files;
     }

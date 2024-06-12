@@ -6,7 +6,7 @@ interface IResponse {
     name: string;
     email: string;
     availableUploadSpace: number;
-    files: string;
+    file: string;
 }
 
 class ReadUploadUseCase {
@@ -21,15 +21,13 @@ class ReadUploadUseCase {
 
         const [infoUser] = await this.repository.read(user);
 
-        const formetedInfoUser = {
-            id: infoUser.user_id,
-            name: infoUser.user_name,
-            email: infoUser.user_email,
-            availableUploadSpace: infoUser.user_availableUploadSpace,
-            files: infoUser.files,
-        };
+        infoUser.availableUploadSpace = Math.floor(
+            200 - infoUser.availableUploadSpace / 1000000,
+        );
 
-        return formetedInfoUser;
+        if (!infoUser) return infoUser;
+
+        return infoUser;
     }
 }
 

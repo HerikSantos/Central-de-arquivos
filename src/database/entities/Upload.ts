@@ -10,6 +10,6 @@ export class Upload {
     @Column()
     file: string;
 
-    @ManyToOne(() => User, (user) => user.file)
+    @ManyToOne(() => User, (user) => user.uploads)
     user: User;
 }
