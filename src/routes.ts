@@ -1,12 +1,10 @@
 import { Router } from "express";
 
 import { ReadUploadController } from "./controller/ReadUploadController";
-import {
-    UploadFiles,
-    IEditedRequest,
-} from "./controller/UploadFilesController";
+import { UploadFiles } from "./controller/UploadFilesController";
 import { UserController } from "./controller/UserController";
 import { authenticateMiddleware } from "./middleware/authenticateMiddleware";
+import { rateLimitAcessMiddleware } from "./middleware/rateLimitAcessMiddleware";
 import { upload } from "./multer";
 
 const route = Router();
@@ -16,6 +14,7 @@ const readUpdateController = new ReadUploadController();
 
 route.post(
     "/upload",
+    rateLimitAcessMiddleware,
     authenticateMiddleware,
     upload.single("foto"),
     async (request, response) => {
@@ -23,20 +22,29 @@ route.post(
     },
 );
 
-route.get("/upload", authenticateMiddleware, async (request, response) => {
-    await readUpdateController.handle(request, response);
-});
+route.get(
+    "/upload",
+    rateLimitAcessMiddleware,
+    authenticateMiddleware,
+    async (request, response) => {
+        await readUpdateController.handle(request, response);
+    },
+);
 
-route.post("/user", async (request, response) => {
+route.post("/user", rateLimitAcessMiddleware, async (request, response) => {
     await userController.create(request, response);
 });
 
-route.get("/user", async (request, response) => {
+route.get("/user", rateLimitAcessMiddleware, async (request, response) => {
     await userController.read(request, response);
 });
 
-route.post("/user/login", async (request, response) => {
-    await userController.login(request, response);
-});
+route.post(
+    "/user/login",
+    rateLimitAcessMiddleware,
+    async (request, response) => {
+        await userController.login(request, response);
+    },
+);
 
 export { route };
