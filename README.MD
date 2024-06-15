@@ -171,6 +171,8 @@ As rotas tem limite de requisição por endereço de ip, utilizei o redis para f
 * [Bcryptjs] - Usado para o hasheamento das senhas e garantir a segurança dos dados da aplicação
 * [MySQL] - Como banco de dados
 * [AWS S3] - Para o deploy dos arquivos
+* [REDIS] - Para definir um limite de requisições nas rotas
+
 
 ## ✒️ Autores
 
