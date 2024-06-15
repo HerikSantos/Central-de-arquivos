@@ -33,6 +33,7 @@ class UserController {
     ): Promise<Response> => {
         try {
             const { name, email, password }: User = request.body;
+
             const user = await createUserUseCase.execute({
                 name,
                 email,

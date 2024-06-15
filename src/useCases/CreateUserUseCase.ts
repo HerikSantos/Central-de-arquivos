@@ -21,6 +21,9 @@ class CreateUserUseCase {
     }): Promise<User> {
         if (!name || !email || !password) throw new Error("Invalid Data");
 
+        if (await this.repository.findByEmail({ email }))
+            throw new Error("User already exists");
+
         if (!validator.isEmail(email)) {
             throw new Error("Invalid email");
         }

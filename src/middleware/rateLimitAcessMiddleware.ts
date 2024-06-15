@@ -33,8 +33,6 @@ async function rateLimitAcessMiddleware(
         });
     }
 
-    await client.set("tico", "gosotos");
-
     next();
 }
 

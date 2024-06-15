@@ -10,6 +10,9 @@ export class Upload {
     @Column()
     file: string;
 
+    @Column()
+    size: number;
+
     @ManyToOne(() => User, (user) => user.uploads)
     user: User;
 }

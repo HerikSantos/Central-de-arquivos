@@ -42,7 +42,7 @@ class UserRepository implements IUserRepository {
         availableUploadSpace,
     }: {
         id: string;
-        availableUploadSpace?: number;
+        availableUploadSpace: number;
     }): Promise<void> {
         const user = await this.findByID({ id });
 
@@ -52,6 +52,11 @@ class UserRepository implements IUserRepository {
 
         Object.assign(user, { availableUploadSpace });
 
+        await this.repository.save(user);
+    }
+
+    async updateAvailableSpace(user: User, space: number): Promise<void> {
+        user.availableUploadSpace = user.availableUploadSpace + space;
         await this.repository.save(user);
     }
 }

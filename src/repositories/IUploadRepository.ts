@@ -19,6 +19,13 @@ class IUploadRepository {
     }) => Promise<Upload>;
 
     read: (user: User) => Promise<IResponse[]>;
+
+    delete: (fileName: string, userId: User) => Promise<void>;
+
+    findFileByName: (
+        fileName: string,
+        userId: User,
+    ) => Promise<Upload | undefined>;
 }
 
 export { IUploadRepository };

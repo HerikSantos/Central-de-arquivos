@@ -33,38 +33,39 @@ class UploadFileUseCase {
 
         const { availableUploadSpace } = user;
 
-        if (availableUploadSpace + size >= 200000000) {
+        if (availableUploadSpace - size <= 0) {
             throw new Error(
-                `Insufficient space limit, ${Math.floor(200 - availableUploadSpace / 1000000)}MB disponible`,
+                `Insufficient space limit, ${Math.floor(availableUploadSpace / 1000000)}MB disponible`,
             );
         }
 
         await this.repository.edit({
             id,
-            availableUploadSpace: availableUploadSpace + size,
+            availableUploadSpace: availableUploadSpace - size,
         });
 
         const newUser = await this.repository.findByID({ id });
 
         const infoFiles = await uploadFiles(originalname, file);
 
-        if (!infoFiles) throw new Error("Someting wrong");
+        if (!infoFiles) throw new Error("Don't possible upload");
 
-        const { result: signedUrl, bucketName, key } = infoFiles;
+        const { result: signedUrl, key } = infoFiles;
 
         if (!newUser)
             throw new Error(
-                `Insufficient space limit, ${Math.floor(200 - availableUploadSpace / 1000000)}MB disponible`,
+                `Insufficient space limit, ${Math.floor(availableUploadSpace / 1000000)}MB disponible`,
             );
 
         await uploadRepository.create({
             user: newUser,
-            fileName: `${bucketName}/${key}`,
+            fileName: `${key}`,
+            size,
         });
 
         // eslint-disable-next-line
         const result = {
-            availableUploadSpace: `${Math.floor(200 - newUser.availableUploadSpace / 1000000)}MB disponible`,
+            availableUploadSpace: `${Math.floor(newUser.availableUploadSpace / 1000000)}MB disponible`,
             signedUrl,
         } as IResponse;
 

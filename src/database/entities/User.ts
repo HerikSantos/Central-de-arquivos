@@ -16,7 +16,7 @@ export class User {
     @Column()
     password: string;
 
-    @Column({ default: 0 })
+    @Column({ default: 200000000 })
     availableUploadSpace: number;
 
     @OneToMany(() => Upload, (upload) => upload.user)
